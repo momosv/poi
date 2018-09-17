@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="UTF-8"/>
+    <title>图链接</title>
+    <!-- <link href="style/reset.css" type="text/css" rel="stylesheet"> -->
+    <script src="/webjars/jquery/1.11.1/jquery.min.js"></script>
+    <script type="text/javascript" src="/webjars/bootstrap/3.3.7/js/bootstrap.js"></script>
+    <link rel="stylesheet" href="/webjars/bootstrap/3.3.7/css/bootstrap.css">
+    <script type="text/javascript">
+
+    function upload(){
+    	var formData = new FormData(document.getElementById('upload_'));
+    	 $.ajax({
+            url: "/testE",
+            type: 'POST',
+            data: formData,
+            // 告诉jQuery不要去处理发送的数据
+            processData: false,
+            // 告诉jQuery不要去设置Content-Type请求头
+            contentType: false,
+            dataType:"json",
+            success: function(rs) {
+              if(rs.code!="error"){
+              //	$('#pic_url').val(rs.data.url);
+              //	document.getElementById("img").src = rs.data.url;
+              }
+            }
+        });
+    }
+
+    </script>
+</head>
+
+<body style="width: 1000px;margin: 0 auto">
+
+    <div style="text-align: center;width: 1000px;width: 1000px;margin: 0 auto;padding-top: 300px;">
+        <h1>在线生成图片URL</h1>
+        <form method="post" action="" enctype="multipart/form-data" id="upload_" >
+            <div class="input-group">
+                <input  class="form-control" type="file" id="files" name="file" onchange="upload()" accept="application/vnd.ms-excel,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"  >
+            </div>
+        </form>
+        <br>
+        <br>
+        <div>
+        </div>
+    </div>
+</body>
+
+</html>
