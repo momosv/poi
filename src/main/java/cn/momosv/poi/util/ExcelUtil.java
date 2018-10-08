@@ -17,6 +17,7 @@ import org.apache.poi.xssf.usermodel.XSSFWorkbook;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -41,7 +42,7 @@ public class ExcelUtil {
     }
 
     private static List<Map> dealExcel2007(File file, List<String> title) throws IOException, MyException, InvalidFormatException {
-        XSSFWorkbook wb = new XSSFWorkbook(file); //把一张xlsx的数据表读到wb里
+        XSSFWorkbook wb = new XSSFWorkbook(new FileInputStream(file)); //把一张xlsx的数据表读到wb里
         XSSFSheet sheet = wb.getSheetAt(0);
         XSSFRow row;
         int totalRow = sheet.getLastRowNum() + 1;
@@ -130,12 +131,13 @@ public class ExcelUtil {
             }
             list.add(map);
         }
+ //       wb.close();
+   //     FileUtil.putWBFile(wb,FileUtil.ROOT+"/momo.xlsx");
         return list;
     }
 
     private static List<Map> dealExcel2003(File file, List<String> title) throws IOException, MyException {
-        POIFSFileSystem fs = new POIFSFileSystem(new FileInputStream(file));
-        HSSFWorkbook wb = new HSSFWorkbook(fs); //把一张xls的数据表读到wb里
+        HSSFWorkbook wb = new HSSFWorkbook( new POIFSFileSystem(new FileInputStream(file))); //把一张xls的数据表读到wb里
         HSSFSheet sheet = wb.getSheetAt(0);
         HSSFRow row;
         int totalRow = sheet.getLastRowNum() + 1;

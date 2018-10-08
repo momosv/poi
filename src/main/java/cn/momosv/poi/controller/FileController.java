@@ -28,7 +28,7 @@ import java.util.Date;
 
 @CrossOrigin("*")
 @RestController
-@RequestMapping("upload")
+@RequestMapping("file")
 public class FileController {
 
     private static final Logger log = LoggerFactory.getLogger(FileController.class);
@@ -59,26 +59,12 @@ public class FileController {
       //  Files.delete(Paths.get(ROOT, "momo.jpg"));
         String fileName="";
         testExcel(null);
-
-        final File htmlFile = File.createTempFile("temp", ".html");//创建临时文件
-        log.info("临时文件所在的本地路径：" + htmlFile.getCanonicalPath());
-        FileOutputStream fos = new FileOutputStream(htmlFile);
-        try {
-            //这里处理业务逻辑
-        } finally {
-            //关闭临时文件
-            fos.flush();
-            fos.close();
-
-            htmlFile.delete();//程序退出时删除临时文件
-        }
-
         if (!file.isEmpty()) {
             type = file.getContentType().split("/")[0];
             fileName= XDateUtils.dateToString(new Date(), DatePattern.DATE_TIME_FULL_NUM.getPattern())+file.getOriginalFilename();
             File file0 =new File(ROOT+"/"+type+"/"+upLoadUser);
             if  (!file0 .exists()  && !file0 .isDirectory()){
-               log.info("路径:"+ROOT+"/"+type+"/"+upLoadUser+" 不存在");
+                log.info("路径:"+ROOT+"/"+type+"/"+upLoadUser+" 不存在");
                 file0 .mkdirs();
             }
             Files.copy(file.getInputStream(),  Paths.get(ROOT+"/"+type+"/"+upLoadUser, fileName));
@@ -87,6 +73,8 @@ public class FileController {
         return Msg.fail("上传的文件为空");
     }
 
+
+    @RequestMapping( value = "testExcel")
     private void testExcel(HttpServletResponse response) throws IOException {
         //创建HSSFWorkbook对象(excel的文档对象)
         XSSFWorkbook wb = new XSSFWorkbook();
@@ -117,8 +105,8 @@ public class FileController {
 
         FileOutputStream output=new FileOutputStream(ROOT+"/workbook.xlsx");
         wb.write(output);
+         Files.copy( Paths.get(ROOT, "workbook.xls"),output);
         output.close();
-        //Files.copy(output,  Paths.get(ROOT, "workbook.xls"));
         //输出Excel文件
     }
 
